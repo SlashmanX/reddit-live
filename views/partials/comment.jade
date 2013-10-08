@@ -1,0 +1,3 @@
+.panel.panel-default(id=comment.id)
+	.panel-heading <strong>#{comment.author}</strong> in <a href = "http://reddit.com/#{comment.link_id}">#{comment.link_title}</a> (<a href="http://reddit.com/r/#{comment.subreddit}">#{comment.subreddit}</a>)
+	.panel-body= comment.body
