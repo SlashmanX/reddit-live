@@ -81,11 +81,9 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/r/:subreddit/', function(req, res) {
-    io.sockets.clients(req.sessionID).join(req.params.subreddit);
     res.render('index', { title: req.params.subreddit, subreddit: req.params.subreddit });
 })
 app.get('/r/:subreddit/comments/:topicid/:topicname?/*', function(req, res) {
-    io.sockets.clients(req.sessionID).join(req.params.subreddit);
     res.render('index', { title: req.params.subreddit, topic: req.params.topicid });
 })
 
