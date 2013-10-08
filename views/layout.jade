@@ -11,7 +11,7 @@ head
 	link(href='/stylesheets/style.css', rel='stylesheet')
 body
 	.container
-		.navbar.navbar-default
+		.navbar.navbar-default.navbar-fixed-top
 			.navbar-header
 				button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
 					span.icon-bar
@@ -43,13 +43,12 @@ body
 								a(href='#') Separated link
 							li
 								a(href='#') One more separated link
-				ul.nav.navbar-nav.navbar-right
-					li.active
-						a(href='') Default
-					li
-						a(href='../navbar-static-top') Static top
-					li
-						a(href='../navbar-fixed-top') Fixed top
+				if user
+					p.pull-right.navbar-text Logged in as <a href="http://reddit.com/user/#{user.name}/" class="navbar-link">#{user.name}</a>
+				else
+					p.pull-right.navbar-text
+						a(href="/auth/reddit/").navbar-link Login to Reddit
+
 		block content
 	script(src='/javascripts/lib/jquery-1.10.2.min.js')
 	script(src='/javascripts/lib/bootstrap.min.js')

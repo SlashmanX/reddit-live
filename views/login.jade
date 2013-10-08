@@ -1,0 +1,18 @@
+extends layout
+
+block content
+	h3 Login to Reddit
+	form.form-horizontal(role="form" method="POST" action="/login/")
+		.form-group
+			label(for="username").col-lg-2.control-label Email
+			.col-lg-10
+				input(type="text" id="username" placeholder="Username").form-control
+		.form-group
+			label(for="password").col-lg-2.control-label Password
+			.col-lg-10
+				input(type="password" id="password" placeholder="Password").form-control
+		.form-group
+			.col-lg-offset-2.col-lg-10
+				button(type="submit").btn.btn-default Sign in
+
+	a(href="/auth/reddit/") Login with Reddit
