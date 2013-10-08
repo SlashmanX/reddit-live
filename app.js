@@ -79,12 +79,20 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
+app.get('/', function(req, res) {
+    getActiveThreads(function(err, data) {
+        var active = data.data.data;
+        res.render('home', {title: 'Home', activeThreads: active});
+    })
+});
 app.get('/r/:subreddit/', function(req, res) {
-    res.render('index', { title: req.params.subreddit, subreddit: req.params.subreddit });
+    res.render('stream', { title: req.params.subreddit, subreddit: req.params.subreddit });
 })
 app.get('/r/:subreddit/comments/:topicid/:topicname?/*', function(req, res) {
-    res.render('index', { title: req.params.subreddit, topic: req.params.topicid });
+    if(req.params.topicid.substring(0,3) == 't3_')
+        res.redirect('/r/'+ req.params.subreddit+'/comments/'+ req.params.topicid.replace('t3_', '')+'/');
+    else
+        res.render('stream', { title: req.params.subreddit, topic: req.params.topicid });
 })
 
 var parser = JSONStream.parse() //emit parts that match this path (any element of the rows array)
@@ -98,3 +106,13 @@ req.pipe(parser)
 parser.pipe(logger);
 
 server.listen(app.get('port'));
+
+function getActiveThreads(callback) {
+    request('http://api.redditanalytics.com/getmostactivethreads?limit=25&timespan=300', function(error, res, body) {
+        if(!error && res.statusCode == 200) {
+            callback(null, {data: JSON.parse(body)})
+        }
+        else
+            callback(error, null);
+    })
+}

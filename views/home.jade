@@ -1,0 +1,7 @@
+extends layout
+
+block content
+	h3 Active Threads
+	.active-threads
+		- each thread in activeThreads
+			include partials/thread.jade
