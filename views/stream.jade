@@ -5,3 +5,7 @@ block content
 		script.
 			subreddit="#{subreddit}"
 			topic="#{topic}"
+		each child in topic.comments
+			- var comment = child.data
+			- comment.score = comment.ups - comment.downs
+			include partials/comment

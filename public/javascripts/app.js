@@ -5,7 +5,7 @@ socket.on('connect', function() {
     if(subreddit)
         socket.emit('subscribe', {room: subreddit});
     if(topic)
-        socket.emit('subscribe', {room: topic});
+        socket.emit('subscribe', {room: topic.id});
 })
 
 socket.on('comment', function(data) {

@@ -8,6 +8,7 @@ head
 	title #{title} - Reddit Stream
 	script(src="/socket.io/socket.io.js")
 	script var socket = io.connect()
+	script!= javascript
 	link(href='/stylesheets/style.css', rel='stylesheet')
 body
 	.container
@@ -44,7 +45,7 @@ body
 							li
 								a(href='#') One more separated link
 				if user
-					p.pull-right.navbar-text Logged in as <a href="http://reddit.com/user/#{user.name}/" class="navbar-link">#{user.name}</a>
+					p.pull-right.navbar-text Logged in as <a href="http://reddit.com/user/#{user.username}/" class="navbar-link">#{user.username}</a>
 				else
 					p.pull-right.navbar-text
 						a(href="/auth/reddit/").navbar-link Login to Reddit

@@ -9,5 +9,8 @@
     "express": "3.4.0",
     "jade": "*",
     "less-middleware": "*"
+  },
+  "devDependencies": {
+    "marked": "~0.2.9"
   }
 }
