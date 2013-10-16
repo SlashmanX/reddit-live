@@ -1,7 +1,8 @@
 extends layout
 
 block content
-	h3 Active Threads
+	h3 Your Homepage
 	.active-threads
-		- each thread in activeThreads
-			include partials/thread.jade
+		- each thread in threads
+			- thread.score = thread.ups - thread.downs
+			include partials/homepage_thread.jade

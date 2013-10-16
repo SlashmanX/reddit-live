@@ -835,3 +835,13 @@ th.hidden-lg,td.hidden-lg{display:table-cell !important}
 th.visible-print,td.visible-print{display:none !important}
 @media print{.visible-print{display:block !important}tr.visible-print{display:table-row !important} th.visible-print,td.visible-print{display:table-cell !important} .hidden-print{display:none !important}tr.hidden-print{display:none !important} th.hidden-print,td.hidden-print{display:none !important}}body{padding-top:70px}
 .navbar{margin-bottom:30px}
+.vote{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;font-size:30px;color:#D0D0D0;cursor:pointer}.vote.liked{color:#ff8b60}
+.vote.disliked{color:#9494ff}
+.upvote{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;font-size:30px;color:#D0D0D0;cursor:pointer}.upvote.liked{color:#ff8b60}
+.upvote.disliked{color:#9494ff}
+.upvote:before{content:"\e113"}
+.upvote:hover{color:#ff8b60}
+.downvote{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;font-size:30px;color:#D0D0D0;cursor:pointer}.downvote.liked{color:#ff8b60}
+.downvote.disliked{color:#9494ff}
+.downvote:before{content:"\e114"}
+.downvote:hover{color:#9494ff}

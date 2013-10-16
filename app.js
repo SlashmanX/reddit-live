@@ -24,7 +24,6 @@ var RedditStrategy = require('passport-reddit').Strategy;
 var crypto = require('crypto');
 var mongoose = require('mongoose');
 var marked = require('marked');
-var expose = require('express-expose');
 
 var User = require('./models/User.js');
 
@@ -135,10 +134,19 @@ app.use(express.session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.locals.moment = require('moment');
+app.locals.md = function(text) {
+    if(text)
+        return require('marked')(text);
+    return text;
+}
 app.use(app.router);
+
+
 app.use(require('less-middleware')({ src: __dirname + '/public', compress: true, optimization: 2 }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.expose(marked, 'md');
+
 
 // development only
 if ('development' == app.get('env')) {
@@ -146,15 +154,18 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', function(req, res) {
-    /*if(req.user) {
-        getUserSubreddits({user: req.user}, function(err, data) {
-            console.log(data);
+    if(req.user) {
+        getUserHomePage({user: req.user}, function(err, data) {
+            res.render('home', {title: 'Home', threads: data, user: req.user})
         })
-    }*/
-    getActiveThreads({limit: 10, time: ACTIVE_THREAD_TIME_LIMIT}, function(err, data) {
+    }
+    else {
+        res.render('home', {title: 'Home', threads: [], user: req.user});
+    }
+    /*getActiveThreads({limit: 10, time: ACTIVE_THREAD_TIME_LIMIT}, function(err, data) {
         var active = data.data.data;
         res.render('home', {title: 'Home', activeThreads: active, user: req.user });
-    })
+    })*/
 });
 app.get('/r/:subreddit/', function(req, res) {
     res.render('stream', { title: req.params.subreddit, subreddit: req.params.subreddit, user: req.user });
@@ -166,7 +177,7 @@ app.get('/r/:subreddit/comments/:topicid/:topicname?/*', function(req, res) {
     else
     {
         getThreadAndComments({id: req.params.topicid}, function(err, topic) {
-            res.render('stream', { title: req.params.subreddit, topic: topic, user: req.user, marked: marked });
+            res.render('stream', { title: req.params.subreddit, topic: topic, user: req.user });
         })
     }
 });
@@ -202,7 +213,26 @@ app.get('/logout/', function(req, res){
     res.redirect('/');
 });
 
-var parser = JSONStream.parse() //emit parts that match this path (any element of the rows array)
+app.post('/upvote/thread/:threadid/', function(req, res){
+
+    voteThing({id: 't3_'+ req.params.threadid, dir: 1, user: req.user}, function(err, status) {
+        if(!err)
+            res.send('ok', 200);
+        else
+            res.send(err, 403);
+    })
+})
+
+app.post('/downvote/thread/:threadid/', function(req, res){
+
+    voteThing({id: 't3_'+ req.params.threadid, dir: -1, user: req.user}, function(err, status) {
+        if(!err)
+            res.send('ok', 200);
+        else
+            res.send(err, 403);
+    })
+})
+/*var parser = JSONStream.parse() //emit parts that match this path (any element of the rows array)
 var req = request({url: 'http://stream.redditanalytics.com'})
 var logger = es.mapSync(function (data) {
     io.sockets.in(data.subreddit).emit('comment', {comment: data});
@@ -211,6 +241,8 @@ var logger = es.mapSync(function (data) {
 
 req.pipe(parser)
 parser.pipe(logger);
+*/
+
 
 server.listen(app.get('port'));
 
@@ -268,5 +300,54 @@ function getUserSubreddits(data, callback) {
             }
             callback(null, user_subreddits);
        }
+    })
+}
+
+function getUserHomePage(data, callback) {
+    var url = 'https://oauth.reddit.com/.json';
+    var oauth = { consumer_key: REDDIT_CONSUMER_KEY,
+        consumer_secret: REDDIT_CONSUMER_SECRET,
+        token: data.user.token,
+        token_secret: data.user.token_secret
+    }
+
+    request({url: url, headers: {'User-Agent': 'reddit-live/0.1 by SlashmanX', 'Authorization': 'bearer '+data.user.token}}, function(error, res, body) {
+        if(error) {
+            callback(error, null);
+        }
+        else {
+            var data = JSON.parse(body);
+            var links = data.data.children;
+            var user_links = [];
+            for(var link in links) {
+                var tmp = links[link];
+                user_links.push(tmp.data);
+            }
+            callback(null, user_links);
+        }
+    })
+}
+
+function voteThing(data, callback) {
+    var url = 'https://oauth.reddit.com/api/vote';
+
+    request.post(url, {
+        form:
+        {
+            dir: data.dir,
+            id: data.id
+        },
+        headers:
+        {
+            'User-Agent': 'reddit-live/0.1 by SlashmanX',
+            'Authorization': 'bearer '+data.user.token
+        }
+    }, function(error, res, body) {
+        if(!error && res.statusCode == 200) {
+            callback(null, 'ok');
+        }
+        else {
+            callback(error, 'error');
+        }
     })
 }

@@ -1,9 +1,43 @@
 @import "./lib/bootstrap.less";
 
+@upvote_color: #FF8B60;
+@downvote_color: #9494FF;
+
+
 body {
     padding-top: 70px;
 }
 
 .navbar {
     margin-bottom: 30px;
+}
+
+.vote {
+    .glyphicon;
+    font-size: 30px;
+    color: #D0D0D0;
+    cursor: pointer;
+
+    &.liked {
+        color: @upvote_color;
+    }
+
+    &.disliked {
+        color: @downvote_color;
+    }
+}
+.upvote {
+    .vote;
+    .glyphicon-chevron-up;
+    &:hover {
+        color: @upvote_color;
+    }
+}
+
+.downvote {
+    .vote;
+    .glyphicon-chevron-down;
+    &:hover {
+        color: @downvote_color;
+    }
 }

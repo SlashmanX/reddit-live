@@ -16,3 +16,29 @@ socket.on('comment', function(data) {
         $(newComment).hide().prependTo('.comments-space').fadeIn("fast");
     }
 })
+
+$('span.upvote').on('click', function() {
+    var parent_row = $($(this).closest('.row[id]'))[0];
+    var thread_id = ($(parent_row).attr('id'));
+
+    $.ajax({
+        type: "POST",
+        url: "/upvote/thread/"+ thread_id +"/",
+        success: function() {
+            console.log('upvoted');
+        }
+    })
+})
+
+$('span.downvote').on('click', function() {
+    var parent_row = $($(this).closest('.row[id]'))[0];
+    var thread_id = ($(parent_row).attr('id'));
+
+    $.ajax({
+        type: "POST",
+        url: "/downvote/thread/"+ thread_id +"/",
+        success: function() {
+            console.log('downvoted');
+        }
+    })
+})
