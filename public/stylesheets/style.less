@@ -26,6 +26,18 @@ body {
         color: @downvote_color;
     }
 }
+
+.score {
+    font-size: 30px;
+    color: #D0D0D0;
+    &.liked {
+        color: @upvote_color;
+    }
+
+    &.disliked {
+        color: @downvote_color;
+    }
+}
 .upvote {
     .vote;
     .glyphicon-chevron-up;

@@ -5,7 +5,7 @@ head
 	meta(name='viewport', content='width=device-width, initial-scale=1.0')
 	meta(name='description', content='')
 	meta(name='author', content='')
-	title #{title} - Reddit Stream
+	title #{title} - Reddit Live
 	script(src="/socket.io/socket.io.js")
 	script var socket = io.connect()
 	script!= javascript
@@ -18,13 +18,13 @@ body
 					span.icon-bar
 					span.icon-bar
 					span.icon-bar
-				a.navbar-brand(href='#') Reddit Stream
+				a.navbar-brand(href='#') Reddit Live
 			.navbar-collapse.collapse
 				ul.nav.navbar-nav
 					li.active
 						a(href='#') Home
 					li
-						a(href='#') Active Threads
+						a(href='/active/') Active Threads
 					li
 						a(href='#') Link
 					li.dropdown
@@ -52,6 +52,7 @@ body
 
 		block content
 	script(src='/javascripts/lib/jquery-1.10.2.min.js')
+	script(src='/javascripts/lib/jquery-ui-1.10.3.custom.min.js')
 	script(src='/javascripts/lib/bootstrap.min.js')
 	script(src="/browserify.js")
 	script(src='/javascripts/app.js')

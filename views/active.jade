@@ -1,0 +1,8 @@
+extends layout
+
+block content
+	h3 Active Threads
+	.active-threads
+		- each thread in threads
+			- thread.score = thread.ups - thread.downs
+			include partials/homepage_thread.jade

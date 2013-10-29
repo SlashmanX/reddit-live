@@ -837,6 +837,8 @@ th.visible-print,td.visible-print{display:none !important}
 .navbar{margin-bottom:30px}
 .vote{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;font-size:30px;color:#D0D0D0;cursor:pointer}.vote.liked{color:#ff8b60}
 .vote.disliked{color:#9494ff}
+.score{font-size:30px;color:#D0D0D0}.score.liked{color:#ff8b60}
+.score.disliked{color:#9494ff}
 .upvote{position:relative;top:1px;display:inline-block;font-family:'Glyphicons Halflings';font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;font-size:30px;color:#D0D0D0;cursor:pointer}.upvote.liked{color:#ff8b60}
 .upvote.disliked{color:#9494ff}
 .upvote:before{content:"\e113"}

@@ -1,0 +1,17 @@
+.row(id=thread.id)
+	.col-md-1
+		.row
+			.col-md-12(style="text-align:center; padding:5px")
+				span.upvote(class=thread.likes ? 'liked' : '')
+		.row
+			.col-md-12
+				span.score(class=thread.likes ? 'liked' : thread.likes==false ? 'disliked' : '')=thread.score
+		.row
+			.col-md-12(style="text-align:center; padding: 5px")
+				span.downvote(class= thread.likes==false ? 'disliked' : '')
+
+	.col-md-10
+		.panel.panel-default
+			.panel-heading Posted in <strong><a href="http://reddit.com/r/#{thread.subreddit}">#{thread.subreddit}</a></strong> by <strong>#{thread.author}</strong><span class='pull-right'>#{moment.unix(thread.created_utc).fromNow()}</span>
+			.panel-body <a href = "#{thread.url}">#{thread.title}</a><a class = 'pull-right' href = '#{thread.permalink}'>View Live</a>
+			.panel-footer #{thread.score} pts | #{thread.num_comments} comments | <a href = "http://reddit.com#{thread.permalink}" target='_blank'>View On Reddit</a>

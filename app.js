@@ -117,8 +117,8 @@ passport.use(new RedditStrategy({
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-var bundle = browserify().use(browserijade(__dirname +'/views/partials'));
-bundle.addEntry(__dirname +'/public/javascripts/app.js');
+var bundle = browserify().use(browserijade(__dirname + '/views/partials'));
+bundle.addEntry(__dirname + '/public/javascripts/app.js');
 app.use(bundle);
 app.use(express.favicon());
 app.use(express.logger('dev'));
@@ -127,7 +127,7 @@ app.use(express.methodOverride());
 app.use(express.cookieParser('I am not wearing any pants'));
 app.use(express.session({
     cookie: {
-        maxAge: new Date(Date.now() + 3600000)
+        maxAge: new Date(Date.now() + 3600000 * 24 * 365) // 3600000ms = 1 day
     },
     key: 'express.sid',
     store: new MongoStore({db: db})
@@ -162,11 +162,14 @@ app.get('/', function(req, res) {
     else {
         res.render('home', {title: 'Home', threads: [], user: req.user});
     }
-    /*getActiveThreads({limit: 10, time: ACTIVE_THREAD_TIME_LIMIT}, function(err, data) {
-        var active = data.data.data;
-        res.render('home', {title: 'Home', activeThreads: active, user: req.user });
-    })*/
 });
+
+app.get('/active/', function(req, res) {
+    getActiveThreads({limit: 10, time: ACTIVE_THREAD_TIME_LIMIT}, function(err, data) {
+        var active = data.data.data;
+        res.render('active', {title: 'Home', threads: active, user: req.user });
+    })
+})
 app.get('/r/:subreddit/', function(req, res) {
     res.render('stream', { title: req.params.subreddit, subreddit: req.params.subreddit, user: req.user });
 });
@@ -231,7 +234,17 @@ app.post('/downvote/thread/:threadid/', function(req, res){
         else
             res.send(err, 403);
     })
-})
+});
+
+app.post('/unvote/thread/:threadid/', function(req, res){
+
+    voteThing({id: 't3_'+ req.params.threadid, dir: 0, user: req.user}, function(err, status) {
+        if(!err)
+            res.send('ok', 200);
+        else
+            res.send(err, 403);
+    })
+});
 /*var parser = JSONStream.parse() //emit parts that match this path (any element of the rows array)
 var req = request({url: 'http://stream.redditanalytics.com'})
 var logger = es.mapSync(function (data) {
@@ -266,7 +279,7 @@ function getThreadAndComments(data, callback) {
             callback(error, null);
         }
         else {
-            var data = JSON.parse(body)
+            var data = JSON.parse(body);
             var topic_info = data[0].data.children[0].data;
             var comments = data[1].data.children; //newest first
 
